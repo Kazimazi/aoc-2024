@@ -14,7 +14,17 @@ solve1 =
   compareLists (a, b) = zipWith (\m n -> abs (m - n)) a b
 
 solve2 :: ([Int], [Int]) -> Int
-solve2 (xs, ys) = undefined
+solve2 = solveSorted . sortFstAndSnd
+ where
+  sortFstAndSnd (xs, ys) = (sort xs, sort ys)
+  solveSorted :: ([Int], [Int]) -> Int
+  solveSorted (_, []) = 0
+  solveSorted ([], _) = 0
+  solveSorted (x : xs, y : ys) =
+    case x `compare` y of
+      LT -> solveSorted (xs, y : ys)
+      EQ -> x + solveSorted (x : xs, ys)
+      GT -> solveSorted (x : xs, ys)
 
 main :: IO ()
 main = do
